@@ -34,9 +34,18 @@ var server = http.createServer(function(request, response){
   } else if(path === '/information.json'){
     response.statusCode = 200
     response.setHeader('Content-Type', 'text/json;charset=utf-8')
+    response.setHeader("Access-Control-Allow-Origin", "http://localhost:9990")
     response.write(fs.readFileSync('./public/information.json'))
     response.end()
-  } else {
+  } else if(path === "/information.js"){
+    response.statusCode = 200
+    response.setHeader('Content-Type', 'text/javascript;charset=utf-8')
+    const string = fs.readFileSync('./public/information.js').toString()
+    const data = fs.readFileSync("./public/information.json").toString()
+    const string2 = string.replace("{{data}}", data)
+    response.write(string2)
+    response.end()
+  }else {
     response.statusCode = 404
     response.setHeader('Content-Type', 'text/html;charset=utf-8')
     response.write(`Address doesn't exist`)
